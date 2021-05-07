@@ -25,7 +25,7 @@ SECRET_KEY = 'jlty8550f!shc6+ls-c2z__+*9vwp1p^q1v=!!*qqs5bx&kz4d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.29.117','*','0.0.0.0']
 
 
 # Application definition

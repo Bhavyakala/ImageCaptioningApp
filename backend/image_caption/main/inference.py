@@ -1,23 +1,23 @@
 import numpy as np
 import json
 import cv2
+from django.conf import settings
 # from keras.applications.inception_v3 import InceptionV3,preprocess_input
 # from keras.applications.vgg16 import VGG16,preprocess_input
 # from keras.applications.vgg19 import VGG19,preprocess_input
 from tensorflow.keras.applications.xception import Xception,preprocess_input
 # from keras.applications.resnet50 import ResNet50,preprocess_input
 from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.preprocessing.image import load_img,img_to_array
+from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing import sequence
-import matplotlib.pyplot as plt
 import tensorflow as tf
 configuration = tf.compat.v1.ConfigProto()
 configuration.gpu_options.allow_growth = True
 session = tf.compat.v1.Session(config=configuration)
 import os
-base_dir = os.path.dirname(os.path.realpath(__file__))
+
+base_dir = settings.BASE_DIR
 
 def single_feature_extract(imageArray) :
         model = Xception()
@@ -36,9 +36,9 @@ def greedy_search(model,photo_file,max_len):
         in_text = 'startseq'
         photo = single_feature_extract(photo_file)
         # photo = np.reshape(photo,photo.shape[1])
-        with open(os.path.join(base_dir,'ml_models/word_to_ix.json'), 'r') as f:
+        with open(os.path.join(base_dir,'main/ml_models/word_to_ix.json'), 'r') as f:
             word_to_ix = json.load(f)
-        with open(os.path.join(base_dir,'ml_models/ix_to_word.json'), 'r') as f:
+        with open(os.path.join(base_dir,'main/ml_models/ix_to_word.json'), 'r') as f:
             ix_to_word = json.load(f)  
 
         ix_to_word = { int(i) : w for i,w in ix_to_word.items()}    
@@ -62,9 +62,9 @@ def greedy_search(model,photo_file,max_len):
         return final
 
 def beam_search(loaded_model,image,max_len,beam_index = 3):
-    with open(os.path.join(base_dir,'word_to_ix.json'), 'r') as f:
+    with open(os.path.join(base_dir,'main/ml_models/word_to_ix.json'), 'r') as f:
         word_to_ix = json.load(f)
-    with open(os.path.join(base_dir,'ix_to_word.json'), 'r') as f:
+    with open(os.path.join(base_dir,'main/ml_models/ix_to_word.json'), 'r') as f:
         ix_to_word = json.load(f) 
     ix_to_word = { int(i) : w for i,w in ix_to_word.items()}    
     word_to_ix = { w : int(i) for w,i in word_to_ix.items()}     
