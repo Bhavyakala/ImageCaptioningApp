@@ -1,7 +1,5 @@
-
-
 import 'dart:io';
-
+import 'package:application/CaptionApi.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,6 +31,7 @@ class ImageCaptioner extends StatefulWidget {
 class _ImageCaptionerState extends State<ImageCaptioner> {
 
   var _image;
+  // var resJson;
   final picker = ImagePicker();
 
   _getImage(ImageSource imageSource) async {
@@ -44,9 +43,16 @@ class _ImageCaptionerState extends State<ImageCaptioner> {
     });
   }
 
+  _apiCall() async {
+    var captionObj = CaptionApi();
+    var res = await captionObj.uploadImage(_image);
+    var res1 = captionObj.getResponse();
+    print(res1);
+  }
   
   Widget _buildImage() {
     if(_image!=null) {
+      _apiCall();
       return Image.file(_image);
     } else {
       return Text("Select an Image", style:  TextStyle(fontSize: 20.0));
@@ -59,7 +65,7 @@ class _ImageCaptionerState extends State<ImageCaptioner> {
       constraints: BoxConstraints.expand(height: 100.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Expanded(
             child: TextButton.icon(
@@ -74,6 +80,24 @@ class _ImageCaptionerState extends State<ImageCaptioner> {
             )
           ),
           VerticalDivider(thickness: 2.0, color: Colors.black, width: 1.0),
+          _image!=null? Expanded (child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => setState((){
+                      _image=null;
+                    }), 
+                    child: Text("Clear"),
+                    style: TextButton.styleFrom(
+                      primary: Colors.white,
+                      backgroundColor: Colors.brown,
+                      shape: RoundedRectangleBorder()
+                    ),
+                  )
+                ),
+                VerticalDivider(thickness: 2.0, color: Colors.black, width: 1.0),
+            ])):Container(),
           Expanded(
             child: TextButton.icon(
               onPressed: () => _getImage(ImageSource.gallery), 
