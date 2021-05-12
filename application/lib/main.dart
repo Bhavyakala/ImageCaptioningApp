@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
 
 
 class ImageCaptioner extends StatefulWidget {
-  @override
+  @override  
   _ImageCaptionerState createState() => _ImageCaptionerState();
 }
 
@@ -56,23 +56,36 @@ class _ImageCaptionerState extends State<ImageCaptioner> {
 
   Widget _buildButtons() {
     return ConstrainedBox(
-      constraints: BoxConstraints.expand(height: 80.0),
+      constraints: BoxConstraints.expand(height: 100.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: ElevatedButton.icon(
+            child: TextButton.icon(
               onPressed: () => _getImage(ImageSource.camera), 
               icon: Icon(Icons.camera_alt), 
-              label: Text("Camera")
-            ), 
+              label: Text("Camera"),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.brown,
+                shape: RoundedRectangleBorder()
+              ),
+            )
           ),
+          VerticalDivider(thickness: 2.0, color: Colors.black, width: 1.0),
           Expanded(
-            child: ElevatedButton.icon(
+            child: TextButton.icon(
               onPressed: () => _getImage(ImageSource.gallery), 
               icon: Icon(Icons.image), 
-              label: Text("gallery")
-            ), 
-          )
+              label: Text("Gallery"),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.brown,
+                shape: RoundedRectangleBorder()
+              ),
+            )
+          ),
         ],
       ),
     );
