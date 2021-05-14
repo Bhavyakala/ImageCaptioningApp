@@ -21,10 +21,8 @@ class CaptionApi {
     
     // print(responseString);
     // print(responseStatusCode);
-    return responseString;
-  }
 
-  getResponse() {
     return resJson;
   }
+
 }
